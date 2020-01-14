@@ -1,0 +1,44 @@
+buildscript {
+    ext {
+        seleniumVersion = '3.141.59'
+    }
+}
+
+plugins {
+    id 'groovy'
+}
+
+group 'web-automation-starter-groovy'
+version '1.0-SNAPSHOT'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile("org.codehaus.groovy:groovy-all:2.5.8")
+    compile("org.spockframework:spock-core:1.3-groovy-2.5"){
+        exclude group: "org.codehaus.groovy", module: "groovy-all"
+    }
+    compile("org.gebish:geb-spock:3.2")
+    compile("org.seleniumhq.selenium:selenium-api:${seleniumVersion}")
+    compile("org.seleniumhq.selenium:selenium-support:${seleniumVersion}")
+    compile("org.seleniumhq.selenium:selenium-chrome-driver:${seleniumVersion}")
+    compile("org.seleniumhq.selenium:selenium-firefox-driver:${seleniumVersion}")
+    compile("org.seleniumhq.selenium:selenium-opera-driver:${seleniumVersion}")
+    compile("org.seleniumhq.selenium:selenium-edge-driver:${seleniumVersion}")
+    compile("org.seleniumhq.selenium:selenium-ie-driver:${seleniumVersion}")
+    compile("com.codeborne:phantomjsdriver:1.4.4")
+    compile("io.github.bonigarcia:webdrivermanager:3.7.1")
+}
+
+def baseUrl = "https://www.seleniumeasy.com/test/"
+
+test {
+    outputs.upToDateWhen { false }
+    systemProperty "driverType", project.hasProperty("driverType") ? project.property("driverType") : "chrome"
+    systemProperty "baseUrl", project.hasProperty("baseUrl") ? project.property("baseUrl") : baseUrl
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+    }
+}
